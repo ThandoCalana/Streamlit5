@@ -1,6 +1,36 @@
 import streamlit as st
 import pandas as pd
 
+
+def set_background(image_file):
+    """Applies a background image using CSS."""
+    page_bg_img = f"""
+    <style>
+    .stApp {{
+        background-image: url("Pink Black Modern Outer Space Presentation.jpg");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }}
+    </style>
+    """
+    st.markdown(page_bg_img, unsafe_allow_html=True)
+
+# Load the image and convert it to base64
+import base64
+
+def get_base64_of_image(image_path):
+    with open(image_path, "rb") as img_file:"Pink Black Modern Outer Space Presentation.jpg"
+    return base64.b64encode(img_file.rea")).decode()
+
+# Streamlit page content
+st.title("EDA,Group Info,Predictions")
+
+# Set background only for this page
+image_base64 = get_base64_of_image("Pink Black Modern Outer Space Presentation.jpg")
+set_background(image_base64)
+
+st.write("EDA,Group Info,Predictions")
 st.title("📌 The Recommender System App")
 st.sidebar.title("Navigation")
 
@@ -30,36 +60,6 @@ elif page == "Predictions":
     st.write("## Get Recommendations")
     st.write("Feature coming soon!")
 
-import streamlit as st
 
-def set_background(image_file):
-    """Applies a background image using CSS."""
-    page_bg_img = f"""
-    <style>
-    .stApp {{
-        background-image: url("");
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-    }}
-    </style>
-    """
-    st.markdown(page_bg_img, unsafe_allow_html=True)
-
-# Load the image and convert it to base64
-import base64
-
-def get_base64_of_image(image_path):
-    with open(image_path, "rb") as img_file:"Pink Black Modern Outer Space Presentation.jpg"
-    return base64.b64encode(img_file.read()).decode()
-
-# Streamlit page content
-st.title("EDA,Group Info,Predictions")
-
-# Set background only for this page
-image_base64 = get_base64_of_image("Pink Black Modern Outer Space Presentation.jpg")
-set_background(image_base64)
-
-st.write("EDA,Group Info,Predictions")
 
 
