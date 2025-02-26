@@ -19,9 +19,9 @@ elif page == "EDA":
 
 elif page == "Group Info":
     st.write("## Team Members")
-    st.write("- Mpho Moloi (Trello and streamlit)")
-    st.write("- Lebogang  Letsoalo (slidedeck and streamlit)")
-    st.write("- Thando Calana (Github Manager)")
+    st.write("- Mpho Moloi")
+    st.write("- Lebogang Letsoalo")
+    st.write("- Thando Calana")
     st.write("- Thabang Maaphosa")
     st.write("- Thato Mzilikazi")
    
@@ -29,9 +29,4 @@ elif page == "Group Info":
 elif page == "Predictions":
     st.write("## Get Recommendations")
     st.write("Feature coming soon!")
-
-
-
-
-
 
