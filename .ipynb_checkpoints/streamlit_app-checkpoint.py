@@ -30,38 +30,36 @@ elif page == "Predictions":
     st.write("## Get Recommendations")
     st.write("Feature coming soon!")
 
-
 import streamlit as st
 
-# Embed HTML for video background
-st.markdown("""
+def set_background(image_file):
+    """Applies a background image using CSS."""
+    page_bg_img = f"""
     <style>
-        /* Set the video background to fill the whole page */
-        .video-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-        }
-        /* Make the content appear above the video */
-        .content {
-            position: relative;
-            z-index: 1;
-        }
+    .stApp {{
+        background-image: url("https://github.com/LeboL-moriski/Streamlit5/blob/master/Pink%20Black%20Modern%20Outer%20Space%20Presentation.jpg");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }}
     </style>
-    <video autoplay loop muted class="video-background">
-        <source src="https://motionbgs.com/media/5476/sung-jin-woo-purple.960x540.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-""", unsafe_allow_html=True)
+    """
+    st.markdown(page_bg_img, unsafe_allow_html=True)
 
-# Now your regular Streamlit content will appear above the video
-st.title("Streamlit App with Video Background")
-st.write("This is a Streamlit app with a video in the background!")
+# Load the image and convert it to base64
+import base64
 
+def get_base64_of_image(image_path):
+    with open(image_path, "rb") as img_file:
+        return base64.b64encode(img_file.read()).decode()
 
+# Streamlit page content
+st.title("EDA,Group Info,Predictions")
+
+# Set background only for this page
+image_base64 = get_base64_of_image("background.jpg")
+set_background(image_base64)
+
+st.write("EDA,Group Info,Predictions")
 
 
