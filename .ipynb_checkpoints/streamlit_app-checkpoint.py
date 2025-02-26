@@ -57,7 +57,7 @@ def get_base64_of_image(image_path):
 st.title("EDA,Group Info,Predictions")
 
 # Set background only for this page
-image_base64 = get_base64_of_image("background.jpg")
+image_base64 = get_base64_of_image("https://github.com/LeboL-moriski/Streamlit5/blob/master/Pink%20Black%20Modern%20Outer%20Space%20Presentation.jpg")
 set_background(image_base64)
 
 st.write("EDA,Group Info,Predictions")
