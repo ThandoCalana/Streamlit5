@@ -50,14 +50,14 @@ def set_background(image_file):
 import base64
 
 def get_base64_of_image(image_path):
-    with open(image_path, "rb") as img_file:"C:\Users\Lebogang\Documents\GitHub\Streamlit5\Pink Black Modern Outer Space Presentation.jpg"
+    with open(image_path, "rb") as img_file:"Pink Black Modern Outer Space Presentation.jpg"
         return base64.b64encode(img_file.read()).decode()
 
 # Streamlit page content
 st.title("EDA,Group Info,Predictions")
 
 # Set background only for this page
-image_base64 = get_base64_of_image("C:\Users\Lebogang\Documents\GitHub\Streamlit5\Pink Black Modern Outer Space Presentation.jpg")
+image_base64 = get_base64_of_image("Pink Black Modern Outer Space Presentation.jpg")
 set_background(image_base64)
 
 st.write("EDA,Group Info,Predictions")
