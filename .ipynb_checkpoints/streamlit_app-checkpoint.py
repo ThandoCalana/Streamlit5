@@ -38,7 +38,7 @@ st.markdown("""
     <style>
         /* Set the video background to fill the whole page */
         .video-background {
-            position: fixed;
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
