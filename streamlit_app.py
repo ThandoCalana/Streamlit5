@@ -21,7 +21,7 @@ import base64
 
 def get_base64_of_image(image_path):
     with open(image_path, "rb") as img_file:"Pink Black Modern Outer Space Presentation.jpg"
-    return base64.b64encode(img_file.rea")).decode()
+    return base64.b64encode(Pink Black Modern Outer Space Presentation.jpg"")).decode()
 
 # Streamlit page content
 st.title("EDA,Group Info,Predictions")
