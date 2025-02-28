@@ -1,20 +1,33 @@
 import streamlit as st
 import pandas as pd
 
+# Define the custom CSS for the background image
+background_image_url = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fpixabay.com%2Fphotos%2Fbeautiful-deep-space-cosmic-7305547%2F&psig=AOvVaw177nnlX5t2NhW2n1sueR4Z&ust=1740826323155000&source=images&cd=vfe&opi=89978449&ved=0CBAQjRxqFwoTCOD4sMmZ5osDFQAAAAAdAAAAABAE" 
 
-def set_background(image_file):
-    """Applies a background image using CSS."""
-    page_bg_img = f"""
+# Inject the custom CSS into the Streamlit app
+st.markdown(
+    f"""
     <style>
-    .stApp {{
-        background-image: url("Pink Black Modern Outer Space Presentation.jpg");
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-    }}
+        body {{
+            background-image: url({background_image_url});
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }}
     </style>
-    """
-    st.markdown(page_bg_img, unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True
+)
+
+# Example content for the Streamlit app
+st.title("Streamlit App with Background Image")
+st.write("This page has a custom background image. Add your content below!")
+
+# Add more content as needed
+st.header("Page 1 Content")
+st.write("You can add more elements here like text, charts, etc.")
+
+
 
 # Load the image and convert it to base64
 import base64
