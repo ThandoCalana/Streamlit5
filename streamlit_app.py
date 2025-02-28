@@ -9,7 +9,7 @@ st.markdown(
     f"""
     <style>
         body {{
-            background-image: url({background_image_url});
+            background-image: url({https://cdn.pixabay.com/photo/2022/07/06/16/25/beautiful-7305547_1280.jpg});
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
