@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # Define the custom CSS for the background image
-background_image_url = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fpixabay.com%2Fphotos%2Fbeautiful-deep-space-cosmic-7305547%2F&psig=AOvVaw177nnlX5t2NhW2n1sueR4Z&ust=1740826323155000&source=images&cd=vfe&opi=89978449&ved=0CBAQjRxqFwoTCOD4sMmZ5osDFQAAAAAdAAAAABAE" 
+background_image_url = "https://cdn.pixabay.com/photo/2022/07/06/16/25/beautiful-7305547_1280.jpg"  # Replace this with your image URL
 
 # Inject the custom CSS into the Streamlit app
 st.markdown(
@@ -29,20 +29,9 @@ st.write("You can add more elements here like text, charts, etc.")
 
 
 
-# Load the image and convert it to base64
-import base64
-
-def get_base64_of_image(image_path):
-    with open(image_path, "rb") as img_file:"Pink Black Modern Outer Space Presentation.jpg"
-    return base64.b64encode(Pink Black Modern Outer Space Presentation.jpg"")).decode()
-
-# Streamlit page content
-st.title("EDA,Group Info,Predictions")
-
-# Set background only for this page
-image_base64 = get_base64_of_image("Pink Black Modern Outer Space Presentation.jpg")
-set_background(image_base64)
-
+# Add more content as needed
+st.header("Page 1 Content")
+st.write("You can add more elements here like text, charts, etc.")
 st.write("EDA,Group Info,Predictions")
 st.title("📌 The Recommender System App")
 st.sidebar.title("Navigation")
