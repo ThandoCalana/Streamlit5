@@ -60,17 +60,25 @@ elif page == "Project Overview":
 
 
 elif page == "EDA":
-    st.write("## Exploratory Data Analysis")
-    data = pd.read_csv("anime.csv")  # Make sure your file is named correctly
-    st.dataframe(data)
-    st.write("### Data Summary")
-    st.write(data.describe())
+    st.title("Exploratory Data Analysis")
+
+    # Load Dataset
+    anime_data = pd.read_csv("anime.csv")  # Make sure "anime.csv" is the correct filename
+
+    # Display the dataset (Optional)
+    st.subheader("Dataset Preview")
+    st.write(anime_data.head())  # Shows the first few rows
+
+    # Display Descriptive Statistics
+    st.subheader("Descriptive Statistics for Categorical Data")
+    st.write(anime_data.describe(include='O'))  # Display stats for categorical columns
+
 
 elif page == "Group Info":
     st.write("## Team Members")
-    st.write("- Mpho Moloi (Trello and streamlit)")
-    st.write("- Lebogang  Letsoalo (slidedeck and streamlit)")
-    st.write("- Thando Calana (Github Manager)")
+    st.write("- Mpho Moloi : Trello and Streamlit")
+    st.write("- Lebogang  Letsoalo : Slidedeck and Streamlit")
+    st.write("- Thando Calana : Github Manager")
     st.write("- Thabang Maaphosa")
     st.write("- Thato Mzilikazi")
    
