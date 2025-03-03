@@ -1,5 +1,8 @@
 import streamlit as st
 import pandas as pd
+import plotly.express as px
+
+
 
 # Define the custom CSS for the background image
 #background_image_url = "https://cdn.pixabay.com/photo/2022/07/06/16/25/beautiful-7305547_1280.jpg"  # Replace this with your image URL
@@ -63,15 +66,54 @@ elif page == "EDA":
     st.title("Exploratory Data Analysis")
 
     # Load Dataset
-    anime_data = pd.read_csv("anime.csv")  # Make sure "anime.csv" is the correct filename
+    anime_data = pd.read_csv("anime.csv")  # Ensure this is the correct file path
 
     # Display the dataset (Optional)
     st.subheader("Dataset Preview")
-    st.write(anime_data.head())  # Shows the first few rows
+    st.write(anime_data.head())
 
     # Display Descriptive Statistics
     st.subheader("Descriptive Statistics for Categorical Data")
-    st.write(anime_data.describe(include='O'))  # Display stats for categorical columns
+    st.write(anime_data.describe(include='O'))
+
+    # Genre vs Rating Analysis
+    st.subheader("Top 10 Genres by Average Rating")
+
+    # Exploding genres into individual rows (Assumes genre is a comma-separated string)
+    anime_exploded = anime_data.copy()
+    anime_exploded = anime_exploded.dropna(subset=['genre', 'rating'])  # Drop missing values
+    anime_exploded['genre'] = anime_exploded['genre'].str.split(', ')  # Split genre into lists
+    anime_exploded = anime_exploded.explode('genre')  # Expand into multiple rows
+
+    # Compute average rating per genre
+    genre_v_rating = anime_exploded.groupby('genre', as_index=False)['rating'].mean()
+
+    # Select the top 10 genres by frequency
+    top_10_genres = anime_exploded['genre'].value_counts().nlargest(10).index
+    genre_v_rating = genre_v_rating[genre_v_rating['genre'].isin(top_10_genres)]
+
+    # Sort by rating
+    genre_v_rating = genre_v_rating.sort_values(by='rating', ascending=False)
+
+    # Create the bar plot
+    fig = px.bar(
+        genre_v_rating, 
+        x='genre', 
+        y='rating', 
+        color='genre', 
+        text=genre_v_rating['rating'].round(1),
+        title="Top 10 Genres by Average Rating",
+        labels={'genre': 'Genre', 'rating': 'Average Rating'},
+        color_discrete_sequence=px.colors.sequential.Magma
+    )
+
+    # Customize layout
+    fig.update_traces(textposition='outside')
+    fig.update_layout(yaxis=dict(gridcolor='lightgray', griddash='dash'), width=1000, height=600)
+
+    # Display the graph in Streamlit
+    st.plotly_chart(fig, use_container_width=True)
+
 
 
 elif page == "Group Info":
