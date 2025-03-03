@@ -2,6 +2,6 @@ streamlit>=1.26.0
 plotly
 numpy
 scikit-learn
-scikit-surprise
+surprise
 scipy
 pandas
