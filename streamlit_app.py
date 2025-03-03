@@ -68,9 +68,9 @@ elif page == "EDA":
 
 elif page == "Group Info":
     st.write("## Team Members")
-    st.write("- Mpho Moloi (Trello and streamlit)")
-    st.write("- Lebogang  Letsoalo (slidedeck and streamlit)")
-    st.write("- Thando Calana (Github Manager)")
+    st.write("- Mpho Moloi : Trello and Streamlit")
+    st.write("- Lebogang  Letsoalo : Slidedeck and Streamlit")
+    st.write("- Thando Calana : Github Manager")
     st.write("- Thabang Maaphosa")
     st.write("- Thato Mzilikazi")
    
