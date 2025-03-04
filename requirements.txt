@@ -5,3 +5,4 @@ scikit-learn
 scipy
 pandas
 surprise==0.1
+torch
