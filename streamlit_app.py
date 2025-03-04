@@ -29,6 +29,7 @@ def set_video_background(video_file):
 
 # Load your preprocessed data and necessary components
 anime_content = pd.read_csv('anime.csv') 
+anime_content['name'] = anime_content['name'].astype(str)
 
 # Sidebar navigation
 st.sidebar.title("Navigation")
