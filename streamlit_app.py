@@ -125,6 +125,29 @@ elif page == "EDA":
     # Display the graph in Streamlit
     st.plotly_chart(fig, use_container_width=True)
 
+    st.subheader("Top 10 Highest rated Anime")
+
+     # Second graph: Top 10 Highest Rated Anime
+    rating_v_anime = anime_exploded.groupby('name', as_index=False)['rating'].mean()
+    top_10_anime = rating_v_anime.nlargest(10, 'rating')
+    top_10_anime = top_10_anime.sort_values(by='rating', ascending=False)
+
+    fig2 = px.bar(
+        top_10_anime, 
+        x='name', 
+        y='rating', 
+        color='name', 
+        text=top_10_anime['rating'].round(1),
+        title="Top 10 Highest Rated Anime",
+        labels={'name': 'Anime Name', 'rating': 'Average Rating'},
+        color_discrete_sequence=px.colors.sequential.Magma
+    )
+
+    fig2.update_traces(textposition='outside')
+    fig2.update_layout(yaxis=dict(gridcolor='lightgray', griddash='dash'), width=1200, height=600)
+
+    # Display the second graph in Streamlit
+    st.plotly_chart(fig2, use_container_width=True)
 
 
 elif page == "Group Info":
