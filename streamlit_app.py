@@ -36,9 +36,10 @@ page = st.sidebar.radio("Go to", ["Home", "EDA", "Project Overview", "Group Info
 
 if page == "Home":
     set_video_background("Images/solo_leveling.jpeg")
-    st.write("Welcome to the Recommender System App!")
+    st.title("Welcome to the Recommender System App!")
 
 elif page == "Project Overview":
+    set_video_background("Images/BG3.jpg")
     # Main Title
     st.title("Project Overview")
 
@@ -139,7 +140,7 @@ elif page == "Group Info":
 
 # Predictions page content
 elif page == "Predictions":
-    set_video_background("Images/Predic.jpg")
+    set_video_background("Images/Predic.png")
     train_df = pd.read_csv("train.csv")
 
 
