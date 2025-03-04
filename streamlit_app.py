@@ -144,17 +144,11 @@ elif page == "Group Info":
 elif page == "Predictions":
     set_video_background("Images/Predic.png")
     train_df = pd.read_csv("train.csv")
-
-    @st.cache
+        
     def load_model(file_path):
         with gzip.open(file_path, 'rb') as f:
             model = pickle.load(f)
-        return torch.load(model)
-        
-    # def load_model(file_path):
-    #     with gzip.open(file_path, 'rb') as f:
-    #         model = pickle.load(f)
-    #     return model
+        return model
 
     svd_model = load_model("svd_model.pkl.gz")
 
