@@ -242,6 +242,7 @@ elif page == "Predictions":
                     recommended_df = recommended_df.head(N)  # Show general recommendations if no genre match
                 else:
                     recommended_df = genre_filtered.head(N)  # Get top N recommendations that contain the genre
+                    recommended_df['name'] = recommended_df['name'].astype(str)
                     st.write(f"Here's the top {N} anime based on {input_anime} filtered by {selected_genre}:")
                     st.dataframe(recommended_df[['name', 'genre', 'type', 'rating']])
                     return
@@ -251,6 +252,7 @@ elif page == "Predictions":
             if not recommended_df.empty:
                 recommended_df = recommended_df.head(N)
                 recommended_df = recommended_df.sort_values(by='rating', ascending=False)
+                recommended_df['name'] = recommended_df['name'].astype(str)
 
                 st.write(f"Here's the top {N} anime based on {input_anime}:")
                 st.dataframe(recommended_df[['name', 'genre', 'type', 'rating']])
