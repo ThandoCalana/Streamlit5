@@ -6,6 +6,7 @@ import gzip
 import base64
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity 
+import torch
 
 # Function to set video background
 def set_video_background(video_file):
@@ -144,11 +145,16 @@ elif page == "Predictions":
     set_video_background("Images/Predic.png")
     train_df = pd.read_csv("train.csv")
 
-
+    @st.cache
     def load_model(file_path):
         with gzip.open(file_path, 'rb') as f:
             model = pickle.load(f)
-        return model
+        return torch.load(model)
+        
+    # def load_model(file_path):
+    #     with gzip.open(file_path, 'rb') as f:
+    #         model = pickle.load(f)
+    #     return model
 
     svd_model = load_model("svd_model.pkl.gz")
 
