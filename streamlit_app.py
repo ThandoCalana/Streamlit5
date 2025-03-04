@@ -4,6 +4,8 @@ import plotly.express as px
 import pickle
 import gzip
 import base64
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity 
 
 # Function to set video background
 def set_video_background(video_file):
@@ -24,36 +26,17 @@ def set_video_background(video_file):
         """,
         unsafe_allow_html=True
     )
-# Define a function for collaborative filtering using the pickled SVD model
-def collaborative_filtering(user_id, anime_df, svd_model):
-    # Predict ratings for all anime for the given user using the SVD model
-    anime_ids = anime_df['anime_id'].unique()
-    predicted_ratings = []
 
-    for anime_id in anime_ids:
-        predicted_rating = svd_model.predict(user_id, anime_id).est  # Get the predicted rating
-        predicted_ratings.append((anime_id, predicted_rating))
-    
-    # Sort the predictions by rating in descending order
-    predicted_ratings.sort(key=lambda x: x[1], reverse=True)
-
-    # Get the top 5 anime recommendations
-    top_recommendations = predicted_ratings[:5]
-
-    # Display the top 5 recommended anime
-    top_animes = anime_df[anime_df['anime_id'].isin([x[0] for x in top_recommendations])]
-    top_animes['predicted_rating'] = [x[1] for x in top_recommendations]
-
-    st.write("Top 5 Recommendations based on Collaborative Filtering:")
-    st.dataframe(top_animes[['name', 'genre', 'type', 'rating', 'predicted_rating']])
+# Load your preprocessed data and necessary components
+anime_content = pd.read_csv('anime.csv') 
 
 # Sidebar navigation
 st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", ["Home", "EDA", "Group Info", "Predictions"])
+page = st.sidebar.radio("Go to", ["Home", "EDA", "Project Overview", "Group Info", "Predictions"])
 
 if page == "Home":
+    set_video_background("Images/solo_leveling.jpeg")
     st.write("Welcome to the Recommender System App!")
-    set_video_background("Images/solo_leveling.png")
 
 elif page == "Project Overview":
     # Main Title
@@ -71,27 +54,23 @@ elif page == "Project Overview":
     st.write("Develop a hybrid recommender system that combines collaborative filtering and content-based techniques to accurately predict how users will rate anime titles they have not yet watched, based on their historical viewing preferences and anime characteristics.")
 
 
-
 elif page == "EDA":
-    st.title("Exploratory Data Analysis")
     set_video_background("Images/BG3.jpg")
-
-    # Load Dataset
-    anime_data = pd.read_csv("anime.csv")  # Ensure this is the correct file path
+    st.title("Exploratory Data Analysis")
 
     # Display the dataset (Optional)
     st.subheader("Dataset Preview")
-    st.write(anime_data.head())
+    st.write(anime_content.head())
 
     # Display Descriptive Statistics
     st.subheader("Descriptive Statistics for Categorical Data")
-    st.write(anime_data.describe(include='O'))
+    st.write(anime_content.describe(include='O'))
 
     # Genre vs Rating Analysis
     st.subheader("Top 10 Genres by Average Rating")
 
     # Exploding genres into individual rows (Assumes genre is a comma-separated string)
-    anime_exploded = anime_data.copy()
+    anime_exploded = anime_content.copy()
     anime_exploded = anime_exploded.dropna(subset=['genre', 'rating'])  # Drop missing values
     anime_exploded['genre'] = anime_exploded['genre'].str.split(', ')  # Split genre into lists
     anime_exploded = anime_exploded.explode('genre')  # Expand into multiple rows
@@ -149,21 +128,20 @@ elif page == "EDA":
     # Display the second graph in Streamlit
     st.plotly_chart(fig2, use_container_width=True)
 
-
 elif page == "Group Info":
     set_video_background("Images/Pink.jpg")
     st.write("## Team Members")
-    st.write("- Mpho Moloi : Trello and Streamlit")
-    st.write("- Lebogang  Letsoalo : Slidedeck and Streamlit")
-    st.write("- Thando Calana : Github Manager")
+    st.write("- Mpho Moloi (Trello and Streamlit)")
+    st.write("- Lebogang Letsoalo (Slide Deck and Streamlit)")
+    st.write("- Thando Calana (GitHub Manager)")
     st.write("- Thabang Maaphosa")
     st.write("- Thato Mzilikazi")
-   
 
+# Predictions page content
 elif page == "Predictions":
-    set_video_background("Images/Predic.png")
-    anime_df = pd.read_csv("anime.csv")
+    set_video_background("Images/Predic.jpg")
     train_df = pd.read_csv("train.csv")
+
 
     def load_model(file_path):
         with gzip.open(file_path, 'rb') as f:
@@ -181,15 +159,104 @@ elif page == "Predictions":
     # User input for preferred genre and type
     selected_genre = st.text_input("Preferred Genre (e.g., Action, Drama, Comedy)", "")
 
-    if model_choice == "Content-Based" and selected_genre != "":
-        content_based_recommendation(selected_genre, selected_type)
+    query = st.text_input("Enter anime name or ID to get recommendations:")
+
+    if query:
+        try:
+            query = int(query)  # Convert to integer if it's an anime ID
+        except ValueError:
+            pass  # Otherwise, it's a name
+
+    if model_choice == "Content-Based":
+
+        anime_content['tags'] = anime_content['genre'] + " " + anime_content['type']
+        anime_content = anime_content.drop(columns=['members', 'episodes'])
+        vectorizer = TfidfVectorizer(stop_words='english')
+        tag_matrix = vectorizer.fit_transform(anime_content['tags'])
+        tag_similarity = cosine_similarity(tag_matrix)
+
+        # Function to get top N recommendations, considering genre if specified
+        def get_top_n_recommendations(query=None, selected_genre=None, N=10):
+            if query:
+                if isinstance(query, int):
+                    anime_idx = anime_content.index[anime_content['anime_id'] == query].tolist()
+                else:
+                    anime_idx = anime_content.index[anime_content['name'].str.contains(query, case=False, na=False)].tolist()
+                
+                if not anime_idx:
+                    return "No anime found with the given query."
+                
+                anime_idx = anime_idx[0]  # Take first match if multiple
+                input_anime = anime_content.loc[anime_idx, 'name']
+                sim_scores = list(enumerate(tag_similarity[anime_idx]))
+                sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+                sim_scores = [s for s in sim_scores if s[0] != anime_idx]  # Exclude input anime
+
+                # Convert results to DataFrame
+                recommended_anime = anime_content.iloc[[i[0] for i in sim_scores]][['name', 'genre', 'type']]
+
+                # If genre is specified, filter recommendations to contain the genre
+                if selected_genre:
+                    recommended_anime = recommended_anime[recommended_anime['genre'].str.contains(selected_genre, case=False, na=False)]
+
+                # Limit to top N results
+                recommended_anime = recommended_anime.head(N)
+
+                st.write(f"The top {N} recommended anime similar to '{input_anime}' filtered by '{selected_genre}' are:")
+                st.write(recommended_anime)
+    
+        recommendations = get_top_n_recommendations(query, selected_genre=selected_genre, N=5)
 
     elif model_choice == "Collaborative Filtering":
-        # User ID input for collaborative filtering
-        user_id = st.number_input("Enter your Anime ID", min_value=1, max_value=train_df['anime_id'].max(), step=1)
 
-        # Make recommendations based on the SVD model
-        collaborative_filtering(user_id, anime_df, svd_model)
+        def collaborative_filtering(query, anime_df, svd_model, selected_genre=None, N=5):
+            if isinstance(query, int):  # Query is an anime ID
+                anime_id = query
+                input_anime = anime_df.loc[anime_df['anime_id'] == anime_id, 'name'].iloc[0]
+            else:  # Query is an anime name
+                anime_match = anime_df[anime_df['name'].str.contains(query, case=False, na=False)]
+                if anime_match.empty:
+                    st.write("No anime found with the given name.")
+                    return
+                input_anime = anime_match.iloc[0]['name']
+                anime_id = anime_match.iloc[0]['anime_id']  # Take the first match if there are many with the same name
+
+            anime_ids = anime_df['anime_id'].unique()
+            predicted_ratings = [(anime, svd_model.predict(anime_id, anime).est) for anime in anime_ids]
+
+            # Sort by predicted rating in descending order
+            predicted_ratings.sort(key=lambda x: x[1], reverse=True)
+
+            # Convert to DataFrame and merge to keep relevant details
+            recommended_df = pd.DataFrame(predicted_ratings, columns=['anime_id', 'predicted_rating'])
+            recommended_df = recommended_df.merge(anime_df, on='anime_id', how='left')
+            
+            if selected_genre:
+                # Filter for anime that *contain* the specified genre
+                genre_filtered = recommended_df[recommended_df['genre'].str.contains(selected_genre, case=False, na=False)]
+                
+                if genre_filtered.empty:
+                    st.write(f"No anime found containing the genre '{selected_genre}', showing general recommendations.")
+                    recommended_df = recommended_df.head(N)  # Show general recommendations if no genre match
+                else:
+                    recommended_df = genre_filtered.head(N)  # Get top N recommendations that contain the genre
+                    st.write(f"Here's the top {N} anime based on {input_anime} filtered by {selected_genre}:")
+                    st.dataframe(recommended_df[['name', 'genre', 'type', 'rating']])
+                    return
+            else:
+                recommended_df = recommended_df.head(N)  # Just take the top N recommendations if no genre is selected
+
+            if not recommended_df.empty:
+                recommended_df = recommended_df.head(N)
+                recommended_df = recommended_df.sort_values(by='rating', ascending=False)
+
+                st.write(f"Here's the top {N} anime based on {input_anime}:")
+                st.dataframe(recommended_df[['name', 'genre', 'type', 'rating']])
+            else:
+                st.write("No recommendations found.")
+
+        if query or selected_genre:
+            collaborative_filtering(query, anime_content, svd_model, selected_genre=selected_genre, N=5)
 
 
 

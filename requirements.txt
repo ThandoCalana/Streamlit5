@@ -1,7 +1,7 @@
-streamlit
+streamlit==1.42.2
 plotly
-numpy
+numpy<2
 scikit-learn
-surprise
 scipy
 pandas
+surprise==0.1
