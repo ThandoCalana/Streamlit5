@@ -128,7 +128,7 @@ elif page == "EDA":
 
 
 elif page == "Group Info":
-    set_video_background("Pink Black Modern Outer Space Presentation (1).jpg")
+    set_video_background("Images/Pink.jpg")
     st.write("## Team Members")
     st.write("- Mpho Moloi : Trello and Streamlit")
     st.write("- Lebogang  Letsoalo : Slidedeck and Streamlit")
