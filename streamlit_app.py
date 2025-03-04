@@ -138,7 +138,7 @@ elif page == "Group Info":
    
 
 elif page == "Predictions":
-    set_video_background("Images/BG1.jpg")
+    set_video_background("Images/Predic.png")
     anime_df = pd.read_csv("anime.csv")
     train_df = pd.read_csv("train.csv")
 
