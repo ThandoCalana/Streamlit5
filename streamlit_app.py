@@ -6,7 +6,6 @@ import gzip
 import base64
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity 
-import torch
 
 # Function to set video background
 def set_video_background(video_file):
